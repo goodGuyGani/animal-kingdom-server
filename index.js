@@ -8,6 +8,8 @@ const util = require('util')
 
 const app = express()
 
+const port = process.env.PORT || 3001
+
 const simplePDFCert = require("simple-pdf-cert");
 
 
@@ -52,6 +54,9 @@ const db = mysql.createPool({
 
 
 //MySQL
+
+
+
 
 app.get('/api/get', (req, res) => {
 
@@ -463,7 +468,11 @@ app.post('/image', upload.single('file'), function (req, res) {
 app.use(express.static('public')); 
 app.use('/api/images', express.static('images'));
 
-app.listen(3001, () => {
+app.use('/', (req, res) => {
+  res.send('Welcome to the server')
+})
+
+app.listen(port, () => {
   console.log("running on port 3001");
 })
 
