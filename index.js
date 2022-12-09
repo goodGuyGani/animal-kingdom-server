@@ -37,10 +37,12 @@ app.use(session({
 }))
 
 const db = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'animal_kingdom'
+  host: 'db4free.net', 
+  port: '3306',
+  user: 'akdbroot',
+  password: 'kiankie123',
+  database: 'animalkingdomdb',
+  multipleStatements: true
 });
 
 
