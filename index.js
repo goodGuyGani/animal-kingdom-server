@@ -34,9 +34,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    expires: 60 * 60 * 99,
+    expires: new Date(253402300000000),
   },
 }))
+
 
 const db = mysql.createPool({
   host: 'db4free.net', 
@@ -47,9 +48,19 @@ const db = mysql.createPool({
   multipleStatements: true
 });
 
+/*
+const db = mysql.createPool({
+  host: 'localhost', 
+  user: 'root',
+  password: '',
+  database: 'animal_kingdom',
+});
+*/
 
-
-
+app.get('/api/logout', (req, res) => {
+  req.session.destroy();
+  res.status(200).send();
+});
 
 
 
@@ -92,8 +103,9 @@ app.post('/api/register', (req, res) => {
   const name = req.body.name
   const mail = req.body.email
   const pass = req.body.password
-  const sqlInsert = "INSERT INTO users (userName, name, userEmail, userPassword) VALUES (?,?,?,?)";
-  db.query(sqlInsert, [user, name, mail, pass], (err, result) => {
+  const imgUrl = req.body.imgUrl
+  const sqlInsert = "INSERT INTO users (userName, name, userEmail, userPassword, imgUrl) VALUES (?,?,?,?,?)";
+  db.query(sqlInsert, [user, name, mail, pass, imgUrl], (err, result) => {
     console.log(result)
   });
 })
