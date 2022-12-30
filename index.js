@@ -298,9 +298,10 @@ app.get('/api/checkanswers/:userid/:lessonid', (req, res) => {
 })
 
 
-app.get('/api/quiz2', (req, res) => {
-  const sqlQuiz = "SELECT * FROM quiz";
-  db.query(sqlQuiz, (err, result) => {
+app.get('/api/quiz2/:lessonid', (req, res) => {
+  const lessonid = req.params.lessonid;
+  const sqlQuiz = "SELECT * FROM quiz WHERE lessId = ?";
+  db.query(sqlQuiz, lessonid, (err, result) => {
     res.send(result);
   });
 });
