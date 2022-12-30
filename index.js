@@ -91,6 +91,14 @@ app.get('/api/lessons', (req, res) => {
   });
 });
 
+app.get('/api/lessons2/:lessonid', (req, res) => {
+  const lessonid = req.params.lessonid
+  const sqlLessons = "SELECT * FROM lessons WHERE lessonId = ?";
+  db.query(sqlLessons, lessonid, (err, result) => {
+    res.send(result);
+  });
+});
+
 app.get('/api/chapters', (req, res) => {
   const sqlLessons = "SELECT * FROM chapters";
   db.query(sqlLessons, (err, result) => {
