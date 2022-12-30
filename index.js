@@ -17,7 +17,7 @@ const simplePDFCert = require("simple-pdf-cert");
 
 
 app.use(cors({
-  origin: ["https://animal-kingdom1.000webhostapp.com"],
+  origin: ["https://animal-kingdom1.000webhostapp.com", "http://animal-kingdom1.000webhostapp.com", "http://localhost:3000" ],
   methods: ["GET", "POST", "DELETE", "HEAD", "PUT", "PATCH"],
   credentials: true
 }));
