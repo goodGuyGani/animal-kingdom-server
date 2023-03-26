@@ -205,6 +205,18 @@ app.post('/api/chapstateinsert', (req, res) => {
   });
 })
 
+app.post('/api/galanimal', (req, res) => {
+  const userid = req.body.userid
+  const imgname = req.body.imgname
+  const animalname = req.body.animalname
+  const dateidentified = req.body.dateidentified
+
+  const sqlInsert = "INSERT INTO animal_gallery (userId, imgName, animalName, dateIdentified) VALUES (?,?,?,?)";
+  db.query(sqlInsert, [userid, imgname, animalname, dateidentified], (err, result) => {
+    console.log(result)
+  });
+})
+
 app.delete("/api/delete1/:chapter", (req, res) => { 
   const chapter = req.params.chapter
   const sqlDelete = "DELETE FROM chapter_state WHERE chapterStateChapterId = ?"
@@ -224,7 +236,19 @@ app.post("/api/insert", (req, res) => {
   db.query(sqlInsert, [movieName, movieReview], (err, result) => {
     console.log(result)
   });
-})
+});
+
+
+
+app.put("/api/insertcapture", (req, res) => {
+  const userid = req.body.userid
+
+  const sqlUpdate = "UPDATE users SET imgCapture = 1 WHERE userId = ?"
+  db.query(sqlUpdate, userid, (err, result) => {
+    if (err) console.log(err)
+
+  });
+});
 
 
 app.get('/api/fetchbyid/:lessonId', (req, res) => {
@@ -305,6 +329,17 @@ app.get('/api/checkanswers/:userid/:lessonid', (req, res) => {
   })
 })
 
+app.get('/api/starcheck/:userid', (req, res) => {
+  const userid = req.params.userid;
+  db.query('SELECT COUNT (id) AS count FROM animal_gallery WHERE userId = ?', userid, (err, result) => {
+    if(err){
+      console.log(err)
+    } else {
+      res.send(result)
+    }
+  })
+})
+
 
 app.get('/api/quiz2/:lessonid', (req, res) => {
   const lessonid = req.params.lessonid;
@@ -327,11 +362,20 @@ app.post("/api/answers", (req, res) => {
   });
 })
 
+
 app.get('/api/checkchapterstate2/:userid/:lessonid', (req, res) => {
   userid = req.params.userid
   lessonid = req.params.lessonid
   const sqlQuery = "SELECT * FROM chapter_state WHERE chapterStateUserId = ? AND chapterStateLessonId = ? ORDER BY chapterStateChapterId DESC LIMIT 1";
   db.query(sqlQuery, [userid, lessonid],(err, result) => {
+    res.send(result);
+  });
+});
+
+app.get('/api/getgallery/:userid', (req, res) => {
+  userid = req.params.userid
+  const sqlQuery = "SELECT * FROM animal_gallery WHERE userId = ? ORDER BY id DESC";
+  db.query(sqlQuery, userid,(err, result) => {
     res.send(result);
   });
 });
@@ -411,6 +455,9 @@ app.get('/api/createcerf/:userid/:lessonid/:user/:lesson', (req, res) => {
   });
 })
 
+
+
+
 app.get("/api/getcerf/:name/:lesson", (req, res) => {
   const name = req.params.name
   const lesson = req.params.lesson
@@ -468,6 +515,37 @@ app.put("/api/update", (req, res) => {
 
   });
 });
+
+app.post('/api/galanimal2', (req, res) => {
+
+  const userid = req.body.userid
+  const imgname = req.body.imgname
+  const animalname = req.body.animalname
+  const dateidentified = req.body.dateidentified
+  const imglink = req.body.imglink
+
+  
+
+  const sqlInsert = "INSERT INTO animal_gallery (userId, imgName, animalName, dateIdentified) VALUES (?,?,?,?)";
+  db.query(sqlInsert, [userid, imgname, animalname, dateidentified], (err, result) => {
+    console.log(result)
+  });
+
+
+  const fs = require('fs');
+  const request = require('request');
+  var download = function(uri, filename, callback){
+  request.head(uri, function(err, res, body){    
+  request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+  });
+};
+
+download(`${imglink}`, `./images/${imgname}`, function(){
+  console.log('done');
+});
+});
+
+
 
 const multer = require('multer')
 
